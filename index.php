@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -45,68 +44,95 @@
                 })
             });
         }
+
     </script>
-<?php
-ini_set('user_agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36');
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "happyplace";
+    <?php
+    ini_set('user_agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36');
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "happyplace";
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$sql = "SELECT name FROM places";
-$lat = "SELECT latitude, longitude FROM places";
-$url = "SELECT icon FROM markers";
-$result = $conn->query($sql);
-$resultla = $conn->query($lat);
-$resulturl = $conn->query($url);
-
-
-if ($result->num_rows > 0) {
-    // output data of each row
-    while ($row = $result->fetch_assoc()) {
-        echo " Ort: " . $row["name"];
-        echo " ";
-        printf($output);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
-} else {
-    echo "0 results";
-}
 
-if ($resultla->num_rows > 0) {
-    if ($row = $resultla->fetch_assoc()) {
-        echo " lat: " . $row["latitude"]  . " long: " . $row["longitude"];
-        $a = $row["latitude"];
-        $b = $row["longitude"];
-        printf($output);
+    $lat = "SELECT name,latitude, longitude FROM places";
+    $resultla = $conn->query($lat);
+
+    $highestQuery = "SELECT * FROM places ORDER BY id DESC LIMIT 0, 1";
+    $resultHigh = $conn->query($highestQuery);
+    while ($row = $resultHigh->fetch_assoc()) {
+        $idH = $row["id"];
     }
-} else {
-    echo "0 results";
-}
+    $nextID = $idH + 1;
+    $ort1 = $_GET['oname'];
+    $lat1 = $_GET['fname'];
+    $long1 = $_GET['lname'];
+
+    if ($lat1 && $long1 != 0){
+    $cords = "INSERT INTO places (id,name,latitude, longitude)
+    VALUES ('$nextID','$ort1','$lat1','$long1')";
+    }
+    $vorname = $_GET['vorname'];
+    $nachname = $_GET['nachname'];
+    $NameQuery = "INSERT INTO apprentices(prename,lastname,place_id)
+    VALUES ('$vorname','$nachname','$nextID')";
+    $result3 = $conn->query($NameQuery);
 
 
-// close curl resource to free up system resources
+    $result2 = $conn->query($cords);
 
-?>
+    ?>
 </head>
 
 <body>
-    <div id="basicMap"></div>
-    <script type="text/javascript">
-        var map = init();
-        lat2 = <?php echo $a; ?>;
-        lng2 = <?php echo $b; ?>;
-        
-        add_map_point(lng2, lat2);
-    </script>
+    <form method="get">
+        <label for="vorname">Vorname:</label>
+        <input type="text" id="vorname" name="vorname" required><br><br>
+        <label for="nachname">Nachname:</label>
+        <input type="text" id="nachname" name="nachname" required><br><br>
+        <label for="oname">Ort:</label>
+        <input type="text" id="oname" name="oname" required><br><br>
+        <label for="fname">Lat:</label>
+        <input type="text" id="fname" name="fname" required><br><br>
+        <label for="lname">long:</label>
+        <input type="text" id="lname" name="lname" required><br><br>
+        <input type="submit" value="Submit">
 
+    </form>
+
+    <form action="Register.php" method="post">
+        <ul>
+            <li>
+                <label for="login">Benutzer</label>
+                <input id="login" name="login">
+            </li>
+            <li>
+                <label for="pass">Passwort</label>
+                <input id="pass" name="pass" type="password">
+            </li>
+            <li>
+                <button>anmelden</button>
+            </li>
+        </ul>
+    </form>
+
+    <div id="basicMap"></div>
+    <script>
+        var map = init();
+
+        <?php
+        while ($row = $resultla->fetch_assoc()) {
+            $name = $row["name"];
+            echo "add_map_point(" . $row["longitude"] . "," . $row["latitude"] . ")\n";
+        }
+        ?>
+    </script>
 
     </div>
 </body>
