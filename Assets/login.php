@@ -12,7 +12,7 @@ $conn = new mysqli($servername, $sqlusername, $sqlpassword, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
+$admin = False;
 if (isset($_POST['but_submit'])) {
 
     $uname = mysqli_real_escape_string($conn, $_POST['txt_uname']);
@@ -30,7 +30,8 @@ if (isset($_POST['but_submit'])) {
         $result = mysqli_query($conn, $verifacation);
         if (mysqli_num_rows($result)) {
             echo "Acess granted";
-            header("Location: Register.php");
+            $admin = true;
+            header("Location: userreg.php");
         } else {
             print $verifacation;
             die(mysqli_error($conn));

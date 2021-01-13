@@ -2,22 +2,28 @@
 <html>
 
 <head>
-    <title>OpenLayers Demo</title>
+    <title>Openlayer map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:100' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/Assets/style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/Assets/marker.png">
     <style type="text/css">
-        html,
         body,
         #basicMap {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            width: 75%;
-            height: 75%;
+            width: 70%;
+            height: 80%;
             margin: 0;
         }
-    </style>
-    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+        
+        html {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+    </style><script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
     <script>
         function add_map_point(lng, lat) {
             var layer = new ol.layer.Vector({
@@ -54,6 +60,8 @@
         }
     </script>
     <?php
+    session_start();
+    $_SESSION["logincheck"] = FALSE;
     ini_set('user_agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36');
     $servername = "localhost";
     $username = "root";
@@ -100,23 +108,6 @@
 </head>
 
 <body>
-    <form method="get">
-        <label for="vorname"></label>
-        <input type="text" id="vorname" name="vorname" required placeholder="Vorname"><br><br>
-        <label for="nachname"></label>
-        <input type="text" id="nachname" name="nachname" required placeholder="Nachname"><br><br>
-        <label for="oname"></label>
-        <input type="text" id="oname" name="oname" required placeholder="Ort"><br><br>
-        <label for="fname"></label>
-        <input type="text" id="fname" name="fname" required placeholder="Latitude"><br><br>
-        <label for="lname"></label>
-        <input type="text" id="lname" name="lname" required placeholder="Longitude"><br><br>
-        <input type="submit" value="Submit">
-
-    </form>
-    <p><a href="/Assets/login.html">LOGIN</a></p>
-
-
 
     <div id="basicMap"></div>
     <script>
@@ -131,6 +122,30 @@
     </script>
 
     </div>
+
+        <div id = accounting>
+    <form method="get" >
+        <label>Register Yourself</label>
+        <br>
+        <br>
+        <label for="vorname"></label>
+        <input type="text" id="vorname" name="vorname" required placeholder="Prename"><br><br>
+        <label for="nachname"></label>
+        <input type="text" id="nachname" name="nachname" required placeholder="Name"><br><br>
+        <label for="oname"></label>
+        <input type="text" id="oname" name="oname" required placeholder="Place of residence"><br><br>
+        <label for="fname"></label>
+        <input type="text" id="fname" name="fname" required placeholder="Latitude"><br><br>
+        <label for="lname"></label>
+        <input type="text" id="lname" name="lname" required placeholder="Longitude"><br><br>
+        <input type="submit" value="Submit">
+
+    </form>
+    </div>
+    <p><a href="/Assets/login.html">LOGIN</a></p>
+
+
+
 </body>
 
 </html>
