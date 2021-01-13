@@ -4,11 +4,14 @@
 <head>
     <title>OpenLayers Demo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:100' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/Assets/style.css">
     <style type="text/css">
         html,
         body,
         #basicMap {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             width: 75%;
             height: 75%;
             margin: 0;
@@ -45,6 +48,10 @@
             });
         }
 
+
+        function login() {
+
+        }
     </script>
     <?php
     ini_set('user_agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36');
@@ -61,6 +68,7 @@
         die("Connection failed: " . $conn->connect_error);
     }
 
+
     $lat = "SELECT name,latitude, longitude FROM places";
     $resultla = $conn->query($lat);
 
@@ -74,53 +82,41 @@
     $lat1 = $_GET['fname'];
     $long1 = $_GET['lname'];
 
-    if ($lat1 && $long1 != 0){
-    $cords = "INSERT INTO places (id,name,latitude, longitude)
+    if ($lat1 && $long1 != 0) {
+        $cords = "INSERT INTO places (id,name,latitude, longitude)
     VALUES ('$nextID','$ort1','$lat1','$long1')";
+        $result2 = $conn->query($cords);
+        $placeID = $conn->insert_id; // function will now return the ID instead of true.
     }
     $vorname = $_GET['vorname'];
     $nachname = $_GET['nachname'];
     $NameQuery = "INSERT INTO apprentices(prename,lastname,place_id)
     VALUES ('$vorname','$nachname','$nextID')";
+
     $result3 = $conn->query($NameQuery);
-
-
-    $result2 = $conn->query($cords);
+    echo mysqli_error($NameQuery);
 
     ?>
 </head>
 
 <body>
     <form method="get">
-        <label for="vorname">Vorname:</label>
-        <input type="text" id="vorname" name="vorname" required><br><br>
-        <label for="nachname">Nachname:</label>
-        <input type="text" id="nachname" name="nachname" required><br><br>
-        <label for="oname">Ort:</label>
-        <input type="text" id="oname" name="oname" required><br><br>
-        <label for="fname">Lat:</label>
-        <input type="text" id="fname" name="fname" required><br><br>
-        <label for="lname">long:</label>
-        <input type="text" id="lname" name="lname" required><br><br>
+        <label for="vorname"></label>
+        <input type="text" id="vorname" name="vorname" required placeholder="Vorname"><br><br>
+        <label for="nachname"></label>
+        <input type="text" id="nachname" name="nachname" required placeholder="Nachname"><br><br>
+        <label for="oname"></label>
+        <input type="text" id="oname" name="oname" required placeholder="Ort"><br><br>
+        <label for="fname"></label>
+        <input type="text" id="fname" name="fname" required placeholder="Latitude"><br><br>
+        <label for="lname"></label>
+        <input type="text" id="lname" name="lname" required placeholder="Longitude"><br><br>
         <input type="submit" value="Submit">
 
     </form>
+    <p><a href="/Assets/login.html">LOGIN</a></p>
 
-    <form action="Register.php" method="post">
-        <ul>
-            <li>
-                <label for="login">Benutzer</label>
-                <input id="login" name="login">
-            </li>
-            <li>
-                <label for="pass">Passwort</label>
-                <input id="pass" name="pass" type="password">
-            </li>
-            <li>
-                <button>anmelden</button>
-            </li>
-        </ul>
-    </form>
+
 
     <div id="basicMap"></div>
     <script>
